@@ -7,6 +7,7 @@ import {CreatLeadDTO} from "./dto/deals.dto";
 import {Result} from "../../response_type";
 import {tokens} from "./types/auth.types";
 
+
 @Injectable()
 export class AmoCRMService {
     constructor(private httpService: HttpService) {
@@ -49,8 +50,9 @@ export class AmoCRMService {
             const refreshToken = response.data.refresh_token;
             // дальнейшая обработка токенов
 
-            process.env.ACCESS_TOKEN = accessToken
-            process.env.REFRESH_TOKEN = refreshToken
+            // Обновляем токены в
+            global['ACCESS_TOKEN_GLOBAL'] = accessToken;
+            global['REFRESH_TOKEN_GLOBAL'] = refreshToken;
 
             return {
                 resultCode: HttpStatus.OK,
@@ -71,12 +73,12 @@ export class AmoCRMService {
     async getAccessTokenFromRefresh(): Promise<Result<tokens>> {
         const subdomain = process.env.SUBDOMAIN; // Поддомен нужного аккаунта
         const url = `https://${subdomain}.amocrm.ru/oauth2/access_token`; // URL для запроса
-
+        const ref_token = global['REFRESH_TOKEN_GLOBAL']
         const data = {
             "client_id": process.env.CLIENT_ID,
             "client_secret": process.env.CLIENT_SECRET,
             "grant_type": "refresh_token",
-            "refresh_token": process.env.REFRESH_TOKEN,
+            "refresh_token": ref_token,
             "redirect_uri": process.env.REDIRECT_URL
         };
 
@@ -100,8 +102,8 @@ export class AmoCRMService {
             const refreshToken = response.data.refresh_token;
             // дальнейшая обработка токенов
 
-            process.env.ACCESS_TOKEN = accessToken
-            process.env.REFRESH_TOKEN = refreshToken
+            global['ACCESS_TOKEN_GLOBAL'] = accessToken;
+            global['REFRESH_TOKEN_GLOBAL'] = refreshToken;
 
             return {
                 resultCode: HttpStatus.OK,
@@ -130,7 +132,8 @@ export class AmoCRMService {
         const subdomain = process.env.SUBDOMAIN; // Поддомен нужного аккаунта
         const url_with_phone = `https://${subdomain}.amocrm.ru/api/v4/contacts?query=${phone}`; // URL для запроса
         const url_with_email = `https://${subdomain}.amocrm.ru/api/v4/contacts?query=${email}`; // URL для запроса
-        const authHeader = `Bearer ${process.env.ACCESS_TOKEN}`
+        const acc_token = global['ACCESS_TOKEN_GLOBAL']
+        const authHeader = `Bearer ${acc_token}`
 
         // Найдем контакты по телефону
         try {
@@ -211,7 +214,8 @@ export class AmoCRMService {
     async createContact(createContactDTO: ContactCreateDTO): Promise<Result<any>> {
         const subdomain = process.env.SUBDOMAIN; // Поддомен нужного аккаунта
         const url = `https://${subdomain}.amocrm.ru/api/v4/contacts`; // URL для запроса
-        const authHeader = `Bearer ${process.env.ACCESS_TOKEN}`
+        const acc_token = global['ACCESS_TOKEN_GLOBAL']
+        const authHeader = `Bearer ${acc_token}`
         const data = [createContactDTO];
 
         try {
@@ -255,7 +259,8 @@ export class AmoCRMService {
     async updateContact(updateContactDTO: ContactUpdateDTO): Promise<Result<boolean>> {
         const subdomain = process.env.SUBDOMAIN; // Поддомен нужного аккаунта
         const url = `https://${subdomain}.amocrm.ru/api/v4/contacts`; // URL для запроса
-        const authHeader = `Bearer ${process.env.ACCESS_TOKEN}`
+        const acc_token = global['ACCESS_TOKEN_GLOBAL']
+        const authHeader = `Bearer ${acc_token}`
         const data = [updateContactDTO];
 
         try {
@@ -298,7 +303,8 @@ export class AmoCRMService {
     async createLead(createLeadDTO: CreatLeadDTO): Promise<Result<boolean>> {
         const subdomain = process.env.SUBDOMAIN; // Поддомен нужного аккаунта
         const url = `https://${subdomain}.amocrm.ru/api/v4/leads`; // URL для запроса
-        const authHeader = `Bearer ${process.env.ACCESS_TOKEN}`
+        const acc_token = global['ACCESS_TOKEN_GLOBAL']
+        const authHeader = `Bearer ${acc_token}`
         const data = [createLeadDTO];
 
         try {

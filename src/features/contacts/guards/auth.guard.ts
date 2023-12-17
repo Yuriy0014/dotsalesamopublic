@@ -1,6 +1,5 @@
 import {CanActivate, Injectable, UnauthorizedException} from "@nestjs/common";
 import * as jwt from 'jsonwebtoken';
-import * as process from "process";
 import {CommandBus} from "@nestjs/cqrs";
 import {
     GetAmoAuthFromRefreshTokenCommand
@@ -12,7 +11,7 @@ export class VerifyAccessTokenGuard implements CanActivate {
     }
 
     async canActivate(): Promise<boolean> {
-        const access_token = process.env.ACCESS_TOKEN
+        const access_token = global['ACCESS_TOKEN_GLOBAL']
 
         if (!access_token) {
             throw new UnauthorizedException([
