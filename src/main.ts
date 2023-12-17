@@ -8,7 +8,7 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new ErrorExceptionFilter(), new HttpExceptionFilter());
-  await app.listen(6112);
+  await app.listen(7070);
 }
 bootstrap();
 
