@@ -24,7 +24,9 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Тетстовое задание на вакансию Junior Backend разработчик (NestJS, Typescript)
+
+Тестами покрыть не успел. Остальное сделано :) Бэкенд опубликован на рендере https://dotsalesamopublic.onrender.com/
 
 ## Installation
 
